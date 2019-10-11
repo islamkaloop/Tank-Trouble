@@ -39,6 +39,10 @@ int turn = 0;
 int defendDirection = true;
 double defendMotion = 0;
 double shootSpeed = 0;
+int movePlayer1 = 0;
+int movePlayer2 = 0;
+int moveplayerdir = 0;
+int colide = 0;
 
 Player player1(0, 50, window_height * .05, 80, 80);
 Player player2(1, window_width - 50, window_height * .05, 80, 80);
@@ -327,6 +331,7 @@ void drowProjectile(double x) {
 				turn = 0;
 			}
 			player2.health -= 10;
+			colide = 2;
 		}
 	}
 	else {
@@ -370,6 +375,7 @@ void drowProjectile(double x) {
 				turn = 0;
 			}
 			player1.health -= 10;
+			colide = 1;
 		}
 	}
 	int d = p[0];
@@ -544,8 +550,8 @@ void Display(void)
 		drowProjectile(shootSpeed);
 	}
 
-	displayPlayer(0, player1.x, player1.y, player1.dx, player1.dy);
-	displayPlayer(1, player2.x, player2.y, -1 * player2.dx, player2.dy);
+	displayPlayer(0, player1.x + movePlayer1, player1.y, player1.dx, player1.dy);
+	displayPlayer(1, player2.x - movePlayer2, player2.y, -1 * player2.dx, player2.dy);
 
 	displayWall();
 
@@ -578,6 +584,33 @@ void Anim()
 	}
 	if ((int)cloud2P == -100) {
 		cloud2P = window_width + 100;
+	}
+
+	if (colide == 1) {
+		if (movePlayer1 < 20 && moveplayerdir == 0) {
+			movePlayer1 += 1;
+		}
+		else {
+			moveplayerdir = 1;
+			movePlayer1 -= 1;
+			if (movePlayer1 == 0) {
+				colide = 0;
+				moveplayerdir = 0;
+			}
+		}
+	}
+	if (colide == 2) {
+		if (movePlayer2 < 20 && moveplayerdir == 0) {
+			movePlayer2 += 1;
+		}
+		else {
+			moveplayerdir = 1;
+			movePlayer2 -= 1;
+			if (movePlayer2 == 0) {
+				colide = 0;
+				moveplayerdir = 0;
+			}
+		}
 	}
 
 	if (defendDirection) {
