@@ -50,6 +50,7 @@ int movePlayer1 = 0;
 int movePlayer2 = 0;
 int moveplayerdir = 0;
 int colide = 0;
+int soundwin = 0;
 
 Player player1(0, 50, window_height * .05, 80, 80);
 Player player2(1, window_width - 50, window_height * .05, 80, 80);
@@ -620,6 +621,15 @@ void Display(void)
 
 void Anim()
 {
+
+	if (player1.health == 0 || player2.health == 0) {
+		m_pBackground->stop();
+		if (soundwin == 0) {
+			SoundEngine->play2D("src/sound/win.wav");
+			soundwin = 1;
+		}
+	}
+
 	cloud1P += 0.2;
 	cloud2P -= 0.1;
 	cloud3P += 0.3;
