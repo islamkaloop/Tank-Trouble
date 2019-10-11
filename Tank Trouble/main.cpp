@@ -336,6 +336,7 @@ void drowProjectile(double x) {
 
 		p = bezier(x, p0, p1, p2, p3);
 		if (p[0] > player2.x - player2.dx && p[0] < player2.x && p[1] > player2.y && p[1] < player2.y + player2.dy) {
+			SoundEngine->play2D("src/sound/explosion.wav");
 			shot = false;
 			shootSpeed = 0;
 			player1.sprint = 0;
@@ -380,6 +381,7 @@ void drowProjectile(double x) {
 		x = 1 - x;
 		p = bezier(x, p0, p1, p2, p3);
 		if (p[0] > player1.x && p[0] < player1.x + player1.dx && p[1] > player1.y && p[1] < player1.y + player1.dy) {
+			SoundEngine->play2D("src/sound/explosion.wav");
 			shot = false;
 			shootSpeed = 0;
 			player1.sprint = 0;
@@ -402,6 +404,7 @@ void drowProjectile(double x) {
 	int c3 = window_height * 0.53;
 	
 	if ((d > c - 100 && d < c + 100 && f > y - 25 && f < y + 25) || (d > c1 - 20 && d < c1 + 20 && f > 0 && f < c3)) {
+		SoundEngine->play2D("src/sound/explosion.wav");
 		shot = false;
 		shootSpeed = 0;
 		player1.sprint = 0;
