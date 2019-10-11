@@ -109,6 +109,26 @@ void drawBackGround() {
 	glPopMatrix();
 }
 
+void displayWall() {
+	int x = window_width / 2;
+	int y = window_height * 0.53;
+	glColor3f(0.247, 0.306, 0.29);
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glVertex2f(x - 20, window_height * .05);
+	glVertex2f(x + 20, window_height * .05);
+	glVertex2f(x + 20, y);
+	glVertex2f(x - 20, y);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(x - 30, window_height * .05);
+	glVertex2f(x + 30, window_height * .05);
+	glVertex2f(x + 30, window_height * .1);
+	glVertex2f(x - 30, window_height * .1);
+	glEnd();
+	glPopMatrix();
+}
+
 int main(int argc, char** argr)
 {
 
@@ -132,6 +152,8 @@ void Display(void)
 
 	displayPlayer(0, player1.x, player1.y, player1.dx, player1.dy);
 	displayPlayer(1, player2.x, player2.y, -1 * player2.dx, player2.dy);
+
+	displayWall();
 
 	glColor3f(0.13333, .545, 0.1333);
 	glBegin(GL_QUADS);
