@@ -35,6 +35,8 @@ double cloud2P = window_width;
 double cloud3P = window_width / 2;
 int mouseDown = false;
 int turn = 0;
+int defendDirection = true;
+double defendMotion = 0;
 
 Player player1(0, 50, window_height * .05, 80, 80);
 Player player2(1, window_width - 50, window_height * .05, 80, 80);
@@ -235,7 +237,7 @@ void displayHealth(int PlayerN, int x, int y, int width, int height) {
 }
 
 void drawDefender() {
-	int x = window_width / 2;
+	int x = window_width / 2 + defendMotion;
 	int y = window_height * 0.65;
 	glColor3f(0.4745, 0.412, 0.396);
 	glBegin(GL_POLYGON);
@@ -329,6 +331,25 @@ void Anim()
 	}
 	if ((int)cloud2P == -100) {
 		cloud2P = window_width + 100;
+	}
+
+	if (defendDirection) {
+		if ((int)defendMotion == window_width * .3) {
+			defendDirection = false;
+			defendMotion -= 0.2;
+		}
+		else {
+			defendMotion += 0.2;
+		}
+	}
+	else {
+		if ((int)defendMotion == -window_width * .3) {
+			defendDirection = true;
+			defendMotion += 0.2;
+		}
+		else {
+			defendMotion -= 0.2;
+		}
 	}
 
 	if (mouseDown) {
