@@ -189,6 +189,45 @@ void displayHealth(int PlayerN, int x, int y, int width, int height) {
 
 }
 
+
+void drawDefender() {
+	int x = window_width / 2;
+	int y = window_height * 0.65;
+	glColor3f(0.4745, 0.412, 0.396);
+	glBegin(GL_POLYGON);
+	{
+
+		glVertex2f(x - 100, y + 20);
+		glVertex2f(x - 95, y + 25);
+		glVertex2f(x + 95, y + 25);
+		glVertex2f(x + 100, y + 20);
+		glVertex2f(x + 100, y - 20);
+		glVertex2f(x + 95, y - 25);
+		glVertex2f(x - 95, y - 25);
+		glVertex2f(x - 100, y - 20);
+	}
+	glEnd();
+	glColor3f(0.6588, 0.8, 0.843);
+	glBegin(GL_QUADS);
+	glVertex2f(x - 10, y - 15);
+	glVertex2f(x + 10, y - 15);
+	glVertex2f(x + 10, y + 15);
+	glVertex2f(x - 10, y + 15);
+	glEnd();
+	glBegin(GL_QUADS);
+	glVertex2f(x - 35, y - 15);
+	glVertex2f(x - 15, y - 15);
+	glVertex2f(x - 15, y + 15);
+	glVertex2f(x - 35, y + 15);
+	glEnd();
+	glBegin(GL_QUADS);
+	glVertex2f(x + 35, y - 15);
+	glVertex2f(x + 15, y - 15);
+	glVertex2f(x + 15, y + 15);
+	glVertex2f(x + 35, y + 15);
+	glEnd();
+}
+
 int main(int argc, char** argr)
 {
 
@@ -218,7 +257,7 @@ void Display(void)
 
 	displayHealth(0, 20, window_height * .93, window_width * .4, window_height * .052);
 	displayHealth(1, window_width - 20, window_height * .93, window_width * .4, window_height * .052);
-
+	drawDefender();
 	glColor3f(0.13333, .545, 0.1333);
 	glBegin(GL_QUADS);
 		glVertex2f(0, 0);
