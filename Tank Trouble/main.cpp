@@ -1,8 +1,10 @@
 #include <iostream>
 #include <math.h>
+#include <IRR/irrKlang.h>
 #include <glut.h>
 
 #pragma comment(lib, "glut32.lib")
+#pragma comment(lib, "irrKlang.lib")
 
 using namespace std;
 
