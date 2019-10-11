@@ -1,7 +1,10 @@
+#include <iostream>
 #include <math.h>
 #include <glut.h>
 
 #pragma comment(lib, "glut32.lib")
+
+using namespace std;
 
 void Display(void);
 void Anim(void);
@@ -46,6 +49,17 @@ int colide = 0;
 
 Player player1(0, 50, window_height * .05, 80, 80);
 Player player2(1, window_width - 50, window_height * .05, 80, 80);
+
+void print(int x, int y, char* string)
+{
+	int len, i;
+	glRasterPos2f(x, y);
+	len = (int)strlen(string);
+	for (i = 0; i < len; i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
+	}
+}
 
 void drawCircle(double centerX, double centerY, double radiusX, double radiusY, int howMuch)
 {
@@ -187,7 +201,6 @@ void drawBackGround() {
 	glPopMatrix();
 }
 
-
 void displyBezier() {
 	glPointSize(1);
 	glColor3f(1, 1, 1);
@@ -273,7 +286,6 @@ void displyBezier() {
 	}
 	glEnd();
 }
-
 
 void drowProjectile(double x) {
 
@@ -559,6 +571,30 @@ void Display(void)
 	displayHealth(0, 20, window_height * .93, window_width * .4, window_height * .052);
 	displayHealth(1, window_width - 20, window_height * .93, window_width * .4, window_height * .052);
 	drawDefender();
+
+	if (player1.health == 0) {
+		glColor3f(0.13333, .545, 0.1333);
+		glBegin(GL_QUADS);
+		glVertex2f(window_width * .35, window_height * .4);
+		glVertex2f(window_width * .35, window_height * .6);
+		glVertex2f(window_width * .65, window_height * .6);
+		glVertex2f(window_width * .65, window_height * .4);
+		glEnd();
+		glColor3f(1, 0, 0);
+		print(window_width * .42, window_height * .5, (char*)"Blue Player win");
+	}
+	else if (player2.health == 0) {
+		glColor3f(0.13333, .545, 0.1333);
+		glBegin(GL_QUADS);
+		glVertex2f(window_width * .35, window_height * .4);
+		glVertex2f(window_width * .35, window_height * .6);
+		glVertex2f(window_width * .65, window_height * .6);
+		glVertex2f(window_width * .65, window_height * .4);
+		glEnd();	
+		glColor3f(1, 0, 0);
+		print(window_width * .42, window_height * .5, (char*)"Green Player win");
+	}
+
 	glColor3f(0.13333, .545, 0.1333);
 	glBegin(GL_QUADS);
 		glVertex2f(0, 0);
