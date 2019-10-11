@@ -4,6 +4,7 @@
 #pragma comment(lib, "glut32.lib")
 
 void Display(void);
+void Anim(void);
 
 class Player
 {
@@ -28,6 +29,9 @@ public:
 
 int window_height = 600;
 int window_width = 1000;
+double cloud1P = 0;
+double cloud2P = window_width;
+double cloud3P = window_width / 2;
 
 Player player1(0, 50, window_height * .05, 80, 80);
 Player player2(1, window_width - 50, window_height * .05, 80, 80);
@@ -95,6 +99,16 @@ void displayPlayer(int PlayerN, int x, int y, int dx, int dy) {
 
 }
 
+void drawCloud(int x, int y)
+{
+	glColor3f(1, 1, 1);
+	drawCircle(x, y, 80, 45, 360);
+	drawCircle(x + 25, y + 15, 35, 35, 360);
+	drawCircle(x + 25, y - 15, 35, 35, 360);
+	drawCircle(x - 25, y - 15, 35, 35, 360);
+	drawCircle(x - 25, y + 15, 35, 35, 360);
+}
+
 void drawBackGround() {
 	glPushMatrix();
 
@@ -105,6 +119,10 @@ void drawBackGround() {
 	glVertex2f(window_width, window_height);
 	glVertex2f(window_width, 0);
 	glEnd();
+
+	drawCloud(cloud1P, window_height * .9);
+	drawCloud(cloud2P, window_height * .8);
+	drawCloud(cloud3P, window_height * .85);
 
 	glPopMatrix();
 }
@@ -180,6 +198,7 @@ int main(int argc, char** argr)
 	glutInitWindowPosition(250, 50);
 	glutCreateWindow("Tank Trouble");
 	glutDisplayFunc(Display);
+	glutIdleFunc(Anim);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	gluOrtho2D(0.0, window_width, 0.0, window_height);
 
@@ -209,4 +228,22 @@ void Display(void)
 	glEnd();
 
 	glFlush();
+}
+
+void Anim()
+{
+	cloud1P += 0.2;
+	cloud2P -= 0.1;
+	cloud3P += 0.3;
+
+	if ((int)cloud1P == window_width + 100) {
+		cloud1P = -100;
+	}
+	if ((int)cloud3P == window_width + 100) {
+		cloud3P = -100;
+	}
+	if ((int)cloud2P == -100) {
+		cloud2P = window_width + 100;
+	}
+	glutPostRedisplay();
 }
