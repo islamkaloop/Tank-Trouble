@@ -55,6 +55,14 @@ void drawCircle(double centerX, double centerY, double radiusX, double radiusY, 
 	glEnd();
 }
 
+int* bezier(float t, int* p0, int* p1, int* p2, int* p3)
+{
+	int res[2];
+	res[0] = pow((1 - t), 3) * p0[0] + 3 * t * pow((1 - t), 2) * p1[0] + 3 * pow(t, 2) * (1 - t) * p2[0] + pow(t, 3) * p3[0];
+	res[1] = pow((1 - t), 3) * p0[1] + 3 * t * pow((1 - t), 2) * p1[1] + 3 * pow(t, 2) * (1 - t) * p2[1] + pow(t, 3) * p3[1];
+	return res;
+}
+
 void displayPlayer(int PlayerN, int x, int y, int dx, int dy) {
 	glLineWidth(100);
 	glColor3f(0.4, 0.4, 0);
@@ -103,7 +111,6 @@ void displayPlayer(int PlayerN, int x, int y, int dx, int dy) {
 	drawCircle(x, y + (dy / 7), dy / 7, dy / 7, 360);
 
 }
-
 
 void displaySprint(void) {
 	glColor3f(1, 1, 1);
@@ -172,6 +179,69 @@ void drawBackGround() {
 	drawCloud(cloud3P, window_height * .85);
 
 	glPopMatrix();
+}
+
+
+void displyBezier() {
+	glPointSize(1);
+	glColor3f(1, 1, 1);
+	glBegin(GL_POINTS);
+
+	int p0[2];
+	int p1[2];
+	int p2[2];
+	int p3[2];
+
+	int x1 = player1.x + player1.dx;
+	int y1 = player1.y + player1.dy;
+	int x2 = player2.x - player2.dx + 5;
+	int y2 = player2.y + player2.dy;
+
+	int rangeThrow = window_height * 0.3;
+
+	for (float t = 0; t < 1; t += 0.001)
+	{
+		int* p = 0;
+		if (turn == 0) {
+			x2 = player2.x;
+			y2 = player2.y;
+
+			p0[0] = x1;
+			p0[1] = y1;
+
+			p1[0] = window_width / 2;
+			p1[1] = window_height * 0.7 ;
+
+			p2[0] = window_width / 2;
+			p2[1] = window_height * 0.7 ;
+
+			p3[0] = x2 ;
+			p3[1] = 0;
+
+			p = bezier(t, p0, p1, p2, p3);
+		}
+		else {
+			x1 = player1.x;
+			y1 = player1.y;
+
+			p0[0] = x1 ;
+			p0[1] = 0;
+
+			p1[0] = window_width / 2;
+			p1[1] = window_height * 0.7 ;
+
+			p2[0] = window_width / 2;
+			p2[1] = window_height * 0.7 ;
+
+			p3[0] = x2;
+			p3[1] = y2;
+
+			p = bezier(t, p0, p1, p2, p3);
+		}
+
+		glVertex3f(p[0], p[1], 0);
+	}
+	glEnd();
 }
 
 void displayWall() {
@@ -292,10 +362,11 @@ int main(int argc, char** argr)
 	return 0;
 }
 
-
 void Display(void)
 {
 	drawBackGround();
+
+	displyBezier();
 
 	displayPlayer(0, player1.x, player1.y, player1.dx, player1.dy);
 	displayPlayer(1, player2.x, player2.y, -1 * player2.dx, player2.dy);
