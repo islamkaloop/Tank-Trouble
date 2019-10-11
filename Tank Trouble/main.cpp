@@ -5,6 +5,7 @@
 
 void Display(void);
 void Anim(void);
+void mou(int b, int s, int x, int y);
 
 class Player
 {
@@ -32,6 +33,8 @@ int window_width = 1000;
 double cloud1P = 0;
 double cloud2P = window_width;
 double cloud3P = window_width / 2;
+int mouseDown = false;
+int turn = 0;
 
 Player player1(0, 50, window_height * .05, 80, 80);
 Player player2(1, window_width - 50, window_height * .05, 80, 80);
@@ -278,6 +281,7 @@ int main(int argc, char** argr)
 	glutInitWindowPosition(250, 50);
 	glutCreateWindow("Tank Trouble");
 	glutDisplayFunc(Display);
+	glutMouseFunc(mou);
 	glutIdleFunc(Anim);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	gluOrtho2D(0.0, window_width, 0.0, window_height);
@@ -326,5 +330,31 @@ void Anim()
 	if ((int)cloud2P == -100) {
 		cloud2P = window_width + 100;
 	}
+
+	if (mouseDown) {
+		if (turn == 0) {
+			if (player1.sprint < 100)
+				player1.sprint = player1.sprint + 0.3;
+		}
+		else {
+			if (player2.sprint < 100)
+				player2.sprint = player2.sprint + 0.3;
+		}
+	}
+
 	glutPostRedisplay();
+}
+
+void mou(int b, int s, int x, int y)
+{
+	if (player1.health != 0 && player2.health != 0) {
+		if (b == GLUT_LEFT_BUTTON && s == GLUT_DOWN )
+		{
+			mouseDown = true;
+		}
+		if (b == GLUT_LEFT_BUTTON && s == GLUT_UP  && mouseDown)
+		{
+			mouseDown = false;
+		}
+	}
 }
