@@ -33,6 +33,8 @@ public:
 	}
 };
 
+irrklang::ISoundEngine* SoundEngine = NULL;
+irrklang::ISound* m_pBackground = NULL;
 int window_height = 600;
 int window_width = 1000;
 double cloud1P = 0;
@@ -539,6 +541,11 @@ void drawDefender() {
 
 int main(int argc, char** argr)
 {
+
+	SoundEngine = irrklang::createIrrKlangDevice();
+	if (!SoundEngine)
+		return 0;
+	m_pBackground = SoundEngine->play2D("src/sound/hitman.wav", true, false, true);
 
 	glutInit(&argc, argr);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
