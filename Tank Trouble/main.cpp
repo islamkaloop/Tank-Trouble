@@ -129,6 +129,48 @@ void displayWall() {
 	glPopMatrix();
 }
 
+void displayHealth(int PlayerN, int x, int y, int width, int height) {
+	double h = 0;
+	width -= height + 5;
+
+	if (PlayerN == 0) {
+		h = (width * ((double)player1.health / 100));
+		displayPlayer(0, x + width + 10, y + 2, height, height - 2);
+	}
+	else {
+		h = -(width * ((double)player2.health / 100));
+		displayPlayer(1, x - width - 10, y + 2, -height, height - 2);
+		width = -width;
+	}
+
+	glColor3f(0.388, 0.329, 0.145);
+	glBegin(GL_QUADS);
+	{
+		glVertex2f(x, y);
+		glVertex2f(x, y + height);
+		glVertex2f(x + width, y + height);
+		glVertex2f(x + width, y);
+	}
+	glEnd();
+
+	if (PlayerN == 0) {
+		glColor3f(0, 0.2, 0);
+	}
+	else {
+		glColor3f(0.145, 0.22745, 0.388);
+	}
+
+	glBegin(GL_QUADS);
+	{
+		glVertex2f(x, y);
+		glVertex2f(x, y + height);
+		glVertex2f(x + h, y + height);
+		glVertex2f(x + h, y);
+	}
+	glEnd();
+
+}
+
 int main(int argc, char** argr)
 {
 
@@ -154,6 +196,9 @@ void Display(void)
 	displayPlayer(1, player2.x, player2.y, -1 * player2.dx, player2.dy);
 
 	displayWall();
+
+	displayHealth(0, 20, window_height * .93, window_width * .4, window_height * .052);
+	displayHealth(1, window_width - 20, window_height * .93, window_width * .4, window_height * .052);
 
 	glColor3f(0.13333, .545, 0.1333);
 	glBegin(GL_QUADS);
