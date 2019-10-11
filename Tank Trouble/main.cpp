@@ -34,9 +34,11 @@ double cloud1P = 0;
 double cloud2P = window_width;
 double cloud3P = window_width / 2;
 int mouseDown = false;
+int shot = false;
 int turn = 0;
 int defendDirection = true;
 double defendMotion = 0;
+double shootSpeed = 0;
 
 Player player1(0, 50, window_height * .05, 80, 80);
 Player player2(1, window_width - 50, window_height * .05, 80, 80);
@@ -199,6 +201,8 @@ void displyBezier() {
 
 	int rangeThrow = window_height * 0.3;
 
+	double changeX = 0;
+	double changeY = 0;
 	for (float t = 0; t < 1; t += 0.001)
 	{
 		int* p = 0;
@@ -206,16 +210,27 @@ void displyBezier() {
 			x2 = player2.x;
 			y2 = player2.y;
 
+			if (shot) {
+				if (player1.sprint < 50) {
+					changeX = -1 * (rangeThrow * (50 - player1.sprint) / 50);
+					changeY = (rangeThrow * (50 - player1.sprint) / 50);
+				}
+				else {
+					changeX = 2 * (rangeThrow * (player1.sprint - 50) / 50);
+					changeY = -0.5 * (rangeThrow * (player1.sprint - 50) / 50);
+				}
+			}
+
 			p0[0] = x1;
 			p0[1] = y1;
 
 			p1[0] = window_width / 2;
-			p1[1] = window_height * 0.7 ;
+			p1[1] = window_height * 0.7 + changeY;
 
 			p2[0] = window_width / 2;
-			p2[1] = window_height * 0.7 ;
+			p2[1] = window_height * 0.7 + changeY;
 
-			p3[0] = x2 ;
+			p3[0] = x2 + changeX;
 			p3[1] = 0;
 
 			p = bezier(t, p0, p1, p2, p3);
@@ -224,14 +239,25 @@ void displyBezier() {
 			x1 = player1.x;
 			y1 = player1.y;
 
-			p0[0] = x1 ;
+			if (shot) {
+				if (player2.sprint < 50) {
+					changeX = (rangeThrow * (50 - player2.sprint) / 50);
+					changeY = (rangeThrow * (50 - player2.sprint) / 50);
+				}
+				else {
+					changeX = -2 * (rangeThrow * (player2.sprint - 50) / 50);
+					changeY = -0.5 * (rangeThrow * (player2.sprint - 50) / 50);
+				}
+			}
+
+			p0[0] = x1 + changeX;
 			p0[1] = 0;
 
 			p1[0] = window_width / 2;
-			p1[1] = window_height * 0.7 ;
+			p1[1] = window_height * 0.7 + changeY;
 
 			p2[0] = window_width / 2;
-			p2[1] = window_height * 0.7 ;
+			p2[1] = window_height * 0.7 + changeY;
 
 			p3[0] = x2;
 			p3[1] = y2;
@@ -242,6 +268,115 @@ void displyBezier() {
 		glVertex3f(p[0], p[1], 0);
 	}
 	glEnd();
+}
+
+
+void drowProjectile(double x) {
+
+	int p0[2];
+	int p1[2];
+	int p2[2];
+	int p3[2];
+
+	int x1 = player1.x + player1.dx;
+	int y1 = player1.y + player1.dy;
+	int x2 = player2.x - player2.dx + 5;
+	int y2 = player2.y + player2.dy;
+
+	int rangeThrow = window_height * 0.3;
+
+	int* p = 0;
+
+	if (turn == 0) {
+		x2 = player2.x;
+		y2 = player2.y;
+		double changeX = 0;
+		double changeY = 0;
+		if (shot) {
+			if (player1.sprint < 50) {
+				changeX = -1 * (rangeThrow * (50 - player1.sprint) / 50);
+				changeY = (rangeThrow * (50 - player1.sprint) / 50);
+			}
+			else {
+				changeX = 2 * (rangeThrow * (player1.sprint - 50) / 50);
+				changeY = -0.5 * (rangeThrow * (player1.sprint - 50) / 50);
+			}
+		}
+		p0[0] = x1;
+		p0[1] = y1;
+
+		p1[0] = window_width / 2;
+		p1[1] = window_height * 0.7 + changeY;
+
+		p2[0] = window_width / 2;
+		p2[1] = window_height * 0.7 + changeY;
+
+		p3[0] = x2 + changeX;
+		p3[1] = 0;
+
+		p = bezier(x, p0, p1, p2, p3);
+	}
+	else {
+		x1 = player1.x;
+		y1 = player1.y;
+		double changeX = 0;
+		double changeY = 0;
+		if (shot) {
+			if (player2.sprint < 50) {
+				changeX = (rangeThrow * (50 - player2.sprint) / 50);
+				changeY = (rangeThrow * (50 - player2.sprint) / 50);
+			}
+			else {
+				changeX = -2 * (rangeThrow * (player2.sprint - 50) / 50);
+				changeY = -0.5 * (rangeThrow * (player2.sprint - 50) / 50);
+			}
+		}
+		p0[0] = x1 + changeX;
+		p0[1] = 0;
+
+		p1[0] = window_width / 2;
+		p1[1] = window_height * 0.7 + changeY;
+
+		p2[0] = window_width / 2;
+		p2[1] = window_height * 0.7 + changeY;
+
+		p3[0] = x2;
+		p3[1] = y2;
+
+		x = 1 - x;
+		p = bezier(x, p0, p1, p2, p3);
+		
+	}
+	int d = p[0];
+	int f = p[1];
+	int c = window_width / 2 + defendMotion;
+	int y = window_height * 0.65;
+	int c1 = window_width / 2;
+	int c3 = window_height * 0.53;
+
+	glPointSize(10);
+	glColor3f(0, 0, 0);
+	drawCircle(d, f, 4, 4, 360);
+	if (turn == 0) {
+		glBegin(GL_QUADS);
+		{
+			glVertex2f(d - 4, f - 4);
+			glVertex2f(d - 4, f + 4);
+			glVertex2f(d, f + 4);
+			glVertex2f(d, f - 4);
+		}
+		glEnd();
+	}
+	else {
+		glBegin(GL_QUADS);
+		{
+			glVertex2f(d, f - 4);
+			glVertex2f(d, f + 4);
+			glVertex2f(d + 4, f + 4);
+			glVertex2f(d + 4, f - 4);
+		}
+		glEnd();
+	}
 }
 
 void displayWall() {
@@ -367,6 +502,9 @@ void Display(void)
 	drawBackGround();
 
 	displyBezier();
+	if (shot) {
+		drowProjectile(shootSpeed);
+	}
 
 	displayPlayer(0, player1.x, player1.y, player1.dx, player1.dy);
 	displayPlayer(1, player2.x, player2.y, -1 * player2.dx, player2.dy);
@@ -434,19 +572,38 @@ void Anim()
 		}
 	}
 
+	if (shot) {
+		if (shootSpeed < 1) {
+			shootSpeed += 0.003;
+		}
+		else {
+			shot = false;
+			shootSpeed = 0;
+			player1.sprint = 0;
+			player2.sprint = 0;
+			if (turn == 0) {
+				turn = 1;
+			}
+			else {
+				turn = 0;
+			}
+		}
+	}
+
 	glutPostRedisplay();
 }
 
 void mou(int b, int s, int x, int y)
 {
 	if (player1.health != 0 && player2.health != 0) {
-		if (b == GLUT_LEFT_BUTTON && s == GLUT_DOWN )
+		if (b == GLUT_LEFT_BUTTON && s == GLUT_DOWN && !shot)
 		{
 			mouseDown = true;
 		}
-		if (b == GLUT_LEFT_BUTTON && s == GLUT_UP  && mouseDown)
+		if (b == GLUT_LEFT_BUTTON && s == GLUT_UP && !shot && mouseDown)
 		{
 			mouseDown = false;
+			shot = true;
 		}
 	}
 }
