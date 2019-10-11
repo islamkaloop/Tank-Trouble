@@ -315,6 +315,19 @@ void drowProjectile(double x) {
 		p3[1] = 0;
 
 		p = bezier(x, p0, p1, p2, p3);
+		if (p[0] > player2.x - player2.dx && p[0] < player2.x && p[1] > player2.y && p[1] < player2.y + player2.dy) {
+			shot = false;
+			shootSpeed = 0;
+			player1.sprint = 0;
+			player2.sprint = 0;
+			if (turn == 0) {
+				turn = 1;
+			}
+			else {
+				turn = 0;
+			}
+			player2.health -= 10;
+		}
 	}
 	else {
 		x1 = player1.x;
@@ -345,7 +358,19 @@ void drowProjectile(double x) {
 
 		x = 1 - x;
 		p = bezier(x, p0, p1, p2, p3);
-		
+		if (p[0] > player1.x && p[0] < player1.x + player1.dx && p[1] > player1.y && p[1] < player1.y + player1.dy) {
+			shot = false;
+			shootSpeed = 0;
+			player1.sprint = 0;
+			player2.sprint = 0;
+			if (turn == 0) {
+				turn = 1;
+			}
+			else {
+				turn = 0;
+			}
+			player1.health -= 10;
+		}
 	}
 	int d = p[0];
 	int f = p[1];
@@ -353,6 +378,19 @@ void drowProjectile(double x) {
 	int y = window_height * 0.65;
 	int c1 = window_width / 2;
 	int c3 = window_height * 0.53;
+	
+	if ((d > c - 100 && d < c + 100 && f > y - 25 && f < y + 25) || (d > c1 - 20 && d < c1 + 20 && f > 0 && f < c3)) {
+		shot = false;
+		shootSpeed = 0;
+		player1.sprint = 0;
+		player2.sprint = 0;
+		if (turn == 0) {
+			turn = 1;
+		}
+		else {
+			turn = 0;
+		}
+	}
 
 	glPointSize(10);
 	glColor3f(0, 0, 0);
