@@ -720,6 +720,7 @@ void mou(int b, int s, int x, int y)
 		{
 			mouseDown = false;
 			shot = true;
+			SoundEngine->play2D("src/sound/cannon.wav");
 		}
 	}
 }
