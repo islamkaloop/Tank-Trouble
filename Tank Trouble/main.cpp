@@ -4,8 +4,32 @@
 
 void Display(void);
 
+class Player
+{
+public:
+	int number;
+	int health;
+	double sprint;
+	int x;
+	int y;
+	int dx;
+	int dy;
+	Player(int number, int x, int y, int dx, int dy) {
+		this->number = number;
+		this->x = x;
+		this->y = y;
+		this->dx = dx;
+		this->dy = dy;
+		this->health = 100;
+		this->sprint = 0;
+	}
+};
+
 int window_height = 600;
 int window_width = 1000;
+
+Player player1(0, 50, window_height * .05, 80, 80);
+Player player2(1, window_width - 50, window_height * .05, 80, 80);
 
 void drawBackGround() {
 	glPushMatrix();
