@@ -99,6 +99,48 @@ void displayPlayer(int PlayerN, int x, int y, int dx, int dy) {
 
 }
 
+
+void displaySprint(void) {
+	glColor3f(1, 1, 1);
+
+	int x = window_height * .05;
+
+	glBegin(GL_LINE_LOOP);
+	{
+		glVertex2f(5, x);
+		glVertex2f(5, 100 + x);
+		glVertex2f(15, 100 + x);
+		glVertex2f(15, x);
+	}
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+	{
+		glVertex2f(window_width - 5, x);
+		glVertex2f(window_width - 5, 100 + x);
+		glVertex2f(window_width - 15, 100 + x);
+		glVertex2f(window_width - 15, x);
+	}
+	glEnd();
+	glColor3f(0, 1, 0);
+
+	glBegin(GL_QUADS);
+	{
+		glVertex2f(5, x);
+		glVertex2f(5, x + player1.sprint);
+		glVertex2f(15, x + player1.sprint);
+		glVertex2f(15, x);
+	}
+	glEnd();
+	glBegin(GL_QUADS);
+	{
+		glVertex2f(window_width - 5, x);
+		glVertex2f(window_width - 5, x + player2.sprint);
+		glVertex2f(window_width - 15, x + player2.sprint);
+		glVertex2f(window_width - 15, x);
+	}
+	glEnd();
+}
+
 void drawCloud(int x, int y)
 {
 	glColor3f(1, 1, 1);
@@ -189,7 +231,6 @@ void displayHealth(int PlayerN, int x, int y, int width, int height) {
 
 }
 
-
 void drawDefender() {
 	int x = window_width / 2;
 	int y = window_height * 0.65;
@@ -255,6 +296,7 @@ void Display(void)
 
 	displayWall();
 
+	displaySprint();
 	displayHealth(0, 20, window_height * .93, window_width * .4, window_height * .052);
 	displayHealth(1, window_width - 20, window_height * .93, window_width * .4, window_height * .052);
 	drawDefender();
