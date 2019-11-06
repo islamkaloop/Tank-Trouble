@@ -89,14 +89,24 @@ int* bezier(float t, int* p0, int* p1, int* p2, int* p3)
 }
 
 void displayPlayer(int PlayerN, int x, int y, int dx, int dy) {
-	glLineWidth(100);
+	glLineWidth(dy / 28);
 	glColor3f(0.4, 0.4, 0);
-	glBegin(GL_LINES);
-	for (int i = -(dy / 28);i < (dy / 28);i++) {
-		glVertex2f(x + (dx / 2) + i, y + (dy * 2 / 7));
-		glVertex2f(x + dx, y + dy - i);
+	if (dx > 0) {
+		glBegin(GL_LINES);
+		for (int i = -(dy / 15);i <= (dy / 15);i++) {
+			glVertex2f(x + (dx / 2) + i, y + (dy * 2 / 7));
+			glVertex2f(x + dx, y + dy - i);
+		}
+		glEnd();
 	}
-	glEnd();
+	else {
+		glBegin(GL_LINES);
+		for (int i = -(dy / 15);i <= (dy / 15);i++) {
+			glVertex2f(x + (dx / 2) + i, y + (dy * 2 / 7));
+			glVertex2f(x + dx, y + dy + i);
+		}
+		glEnd();
+	}
 	glLineWidth(1);
 	glColor3f(0.2, 0.2039, 0);
 	drawCircle(x + dx, y + dy, (dy / 14), (dy / 14), 360);
